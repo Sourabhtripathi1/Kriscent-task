@@ -1,0 +1,26 @@
+/* InteractiveTestimonialSlider.css */
+
+section {
+	padding-top: 50px;
+}
+
+.testimonial-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+	padding: 20px;
+}
+
+.testimonial-image {
+	width: 100px;
+	/* Adjust the image size as needed */
+	height: 100px;
+	margin-bottom: 20px;
+}
+
+.testimonial-content {
+	max-width: 400px;
+	/* Adjust the content width as needed */
+}
