@@ -1,14 +1,20 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
-const initialState = { cart: [] };
+const initialState = { user: "", cart: [] };
 
 export const cartSlice = createSlice({
   name: "userCart",
   initialState,
   reducers: {
+    setCart: (state, action) => {
+
+      state.cart = action.payload.user;
+      state.cart = action.payload.cart;
+    
+    },
     add_to_cart: (state, action) => {
       state.cart.push({
-        id: nanoid(),
+        prod_id: action.payload._id,
         name: action.payload.name,
         price: action.payload.price,
         quantity: 1,

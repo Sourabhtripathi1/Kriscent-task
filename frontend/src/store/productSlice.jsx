@@ -2,11 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   products: [
-    { id: 1, name: "Product 1", price: 19.99, img: "" },
-    { id: 2, name: "Product 2", price: 29.99, img: "" },
-    { id: 3, name: "Product 2", price: 29.99, img: "" },
-    { id: 4, name: "Product 2", price: 29.99, img: "" },
-    { id: 5, name: "Product 2", price: 29.99, img: "" },
+    { id: 1, name: "Product 1", price: 19.99, img: "../images/Frame 6.png" },
   ],
 };
 

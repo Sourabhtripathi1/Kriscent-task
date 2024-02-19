@@ -3,6 +3,8 @@ import { Card, Button, Form } from "react-bootstrap";
 import { login, signUp } from "../store/authSlice";
 import MyNavbar from "../components/Navbar";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,25 +14,76 @@ export function Login() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const toggleForm = () => {
     setIsLogin((prevIsLogin) => !prevIsLogin);
   };
 
+  const loginUser = async (data) => {
+    try {
+      const res = await axios.post(`http://localhost:5000/api/auth/login`, {
+        email: data.email,
+        pswd: data.pswd,
+      });
+      console.log({
+        email: res.data.user.email,
+        name: res.data.user.name,
+      });
+
+      dispatch(
+        login({
+          user: {
+            email: res.data.user.email,
+            name: res.data.user.name,
+          },
+          auth: res.data.auth,
+        })
+      );
+
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const signUpUser = async (data) => {
+    try {
+      const res = await axios.post(`http://localhost:5000/api/auth/register`, {
+        name: data.name,
+        email: data.email,
+        pswd: data.pswd,
+      });
+
+      dispatch(
+        signUp({
+          user: {
+            email: res.data.user.email,
+            name: res.data.user.name,
+          },
+          auth: res.data.auth,
+        })
+      );
+
+      navigate("/")
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isLogin) {
-      dispatch(login({ email: formData.email, pswd: formData.password }));
+      loginUser({ email: formData.email, pswd: formData.password });
     } else {
-      dispatch(
-        signUp({
-          name: formData.name,
-          email: formData.email,
-          pswd: formData.password,
-        })
-      );
+      signUpUser({
+        name: formData.name,
+        email: formData.email,
+        pswd: formData.password,
+      });
     }
 
     setFormData({

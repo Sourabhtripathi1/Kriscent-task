@@ -7,7 +7,7 @@ const HeroSlider = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="https://via.placeholder.com/1500x600"
+          src="../images/Frame 2.png"
           alt="First slide"
         />
 
@@ -19,7 +19,7 @@ const HeroSlider = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="https://via.placeholder.com/1500x600"
+          src="../images/Frame 3.png"
           alt="Second slide"
         />
         <Carousel.Caption>
@@ -30,7 +30,7 @@ const HeroSlider = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="https://via.placeholder.com/1500x600"
+          src="../images/Frame 4.png"
           alt="Second slide"
         />
         <Carousel.Caption>
@@ -41,7 +41,7 @@ const HeroSlider = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="https://via.placeholder.com/1500x600"
+          src="../images/Frame 5.png"
           alt="Second slide"
         />
         <Carousel.Caption>

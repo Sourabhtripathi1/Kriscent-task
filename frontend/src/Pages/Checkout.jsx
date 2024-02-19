@@ -1,10 +1,18 @@
 // Checkout.js
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Form, Button, Table } from "react-bootstrap";
 import MyNavbar from "../components/Navbar";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const Checkout = () => {
+  
+  const user = useSelector((state) => state.userAuth.user);
+  
+
+  const navigate=useNavigate()
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -12,11 +20,15 @@ export const Checkout = () => {
     creditCard: "",
   });
 
-  const cartItems = [
-    { id: 1, name: "Product 1", price: 20, quantity: 2 },
-    { id: 2, name: "Product 2", price: 30, quantity: 1 },
-    // Add more items as needed
-  ];
+  const cartItems =useSelector((state) => state.userCart.cart);
+
+  useEffect(() => {
+
+    if (!user.email) {
+      alert("Please Login")
+      navigate("/login");
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

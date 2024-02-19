@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import MyNavbar from "../components/Navbar";
 import { Table, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { remove_from_cart } from "../store/cartSlice";
@@ -9,13 +10,20 @@ import { remove_from_cart } from "../store/cartSlice";
 export const UserCart = () => {
   const cartItems = useSelector((state) => state.userCart.cart);
 
+  const navigate=useNavigate()
+
+  const user = useSelector((state) => state.userAuth.user);
+
   const dispatch = useDispatch();
 
-  // const [cartItems, setCartItems] = useState([
-  //   { id: 1, name: "Product 1", price: 20, quantity: 2 },
-  //   { id: 2, name: "Product 2", price: 30, quantity: 1 },
-  //   // Add more items as needed
-  // ]);
+  useEffect(() => {
+
+    if (!user.email) {
+      alert("Please Login")
+      navigate("/login");
+    }
+  }, []);
+
 
   const getTotalPrice = () => {
     let total = 0;

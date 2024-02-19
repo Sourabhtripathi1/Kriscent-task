@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
 import MyNavbar from "../components/Navbar";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const Orders = () => {
   const [orders, setOrders] = useState([]);
+
+  const user = useSelector((state) => state.userAuth.user);
+  const navigate = useNavigate();
 
   const dummyOrders = [
     { id: 1, date: "2022-01-01", total: 50.0 },
@@ -15,6 +20,14 @@ export const Orders = () => {
     // You can fetch orders from an API here
     // For now, using dummyOrders
     setOrders(dummyOrders);
+  }, []);
+
+  useEffect(() => {
+    if (!user.email) {
+      alert("Please Login");
+      navigate("/login");
+    }
+
   }, []);
 
   return (

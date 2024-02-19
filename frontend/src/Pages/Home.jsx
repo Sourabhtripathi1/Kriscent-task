@@ -19,11 +19,6 @@ export const Home = () => {
         </div>
       </section>
 
-      <section className="pt-5">
-        <div className="container">
-          <ProductSlider />
-        </div>
-      </section>
 
       <section
         className="container"
