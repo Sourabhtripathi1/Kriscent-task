@@ -34,15 +34,16 @@ const ContactForm = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}>
+        onSubmit={onSubmit}
+      >
         <Form>
-          <div className="form-group">
+          <div className="form-group pt-3">
             <label htmlFor="name">Name</label>
             <Field type="text" id="name" name="name" className="form-control" />
             <ErrorMessage name="name" component="div" className="text-danger" />
           </div>
 
-          <div className="form-group">
+          <div className="form-group pt-3">
             <label htmlFor="email">Email</label>
             <Field
               type="email"
@@ -57,7 +58,7 @@ const ContactForm = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group pt-3">
             <label htmlFor="message">Message</label>
             <Field
               as="textarea"
@@ -72,7 +73,7 @@ const ContactForm = () => {
             />
           </div>
 
-          <div className="text-center">
+          <div className="d-flex text-center pt-3 justify-content-end">
             <button type="submit" className="btn btn-primary">
               Submit
             </button>

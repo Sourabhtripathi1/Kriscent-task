@@ -38,35 +38,44 @@ const ProductSlider = () => {
 
   const addToCart = (data) => {
     if (user.email) {
-      dispatch(add_to_cart(data));
+      dispatch(add_to_cart({ user: user.email, product: data }));
     } else {
       navigate("/login");
     }
   };
 
   return (
-    <Slider {...settings}>
-      {products.map((product) => (
-        <div key={product._id} className="m-3">
-          <div className="card" style={{ margin: "10px" }}>
-            <img
-              src={product.image}
-              className="card-img-top"
-              alt={product.name}
-            />
-            <div className="card-body">
-              <h5 className="card-title">{product.name}</h5>
-              <p className="card-text">Price: ₹{product.price}</p>
-              <button
-                className="btn btn-primary"
-                onClick={() => addToCart(product)}>
-                Add to Cart
-              </button>
+    <>
+      <div className="d-flex justify-content-center">
+        <h4> Products</h4>
+      </div>
+      <Slider {...settings}>
+        {products.map((product) => (
+          <div key={product._id} className="m-3">
+            <div className="card" style={{ margin: "10px" }}>
+              <img
+                src={product.image}
+                className="card-img-top"
+                alt={product.name}
+              />
+              <div className="card-body">
+                <h5 className="card-title">{product.name}</h5>
+                <p className="card-text">Price: ₹{product.price}</p>
+
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => addToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-    </Slider>
+        ))}
+      </Slider>
+    </>
   );
 };
 

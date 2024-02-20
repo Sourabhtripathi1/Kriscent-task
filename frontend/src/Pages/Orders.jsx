@@ -13,18 +13,6 @@ export const Orders = () => {
   const user = useSelector((state) => state.userAuth.user);
   const navigate = useNavigate();
 
-  const dummyOrders = [
-    { id: 1, date: "2022-01-01", total: 50.0 },
-    { id: 2, date: "2022-02-15", total: 75.5 },
-    // Add more orders as needed
-  ];
-
-  useEffect(() => {
-    // You can fetch orders from an API here
-    // For now, using dummyOrders
-    setOrders(dummyOrders);
-  }, []);
-
   useEffect(() => {
     if (!user.email) {
       alert("Please Login");
@@ -40,6 +28,7 @@ export const Orders = () => {
         })
         .then((res) => {
           console.log(res.data);
+          setOrders(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -57,19 +46,46 @@ export const Orders = () => {
         <Table responsive striped bordered hover>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Order</th>
               <th>Date</th>
               <th>Total</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.date}</td>
-                <td>${order.total.toFixed(2)}</td>
-              </tr>
-            ))}
+            {orders.map((order) => {
+              const originalDate = new Date("2024-02-20T10:49:26.135Z");
+
+              // Convert to d-m-y format
+              const formattedDate = originalDate.toLocaleDateString("en-GB"); // 'en-GB' corresponds to the format d-m-y
+
+              return (
+                <tr key={order.id}>
+                  <td>
+                    <div
+                      className="d-flex "
+                      style={{ flexDirection: "column" }}
+                    >
+                      {order.order.map((item, index) => (
+                        <div
+                          key={index}
+                          className="d-flex"
+                          style={{ justifyContent: "space-between" }}
+                        >
+                          <div>{item.name}</div>
+                          <div>X</div> <div>{item.quantity}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td style={{ verticalAlign: "middle" }}>{formattedDate}</td>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {order.total.toFixed(2)}
+                  </td>
+                  <td style={{ verticalAlign: "middle" }}>{order.status}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       </Container>

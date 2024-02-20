@@ -12,24 +12,24 @@ const MyNavbar = () => {
 
 
   return (
-    <Navbar className="p-3" bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand href="/">My React App</Navbar.Brand>
+    <Navbar className="p-3" bg="dark" variant="dark" expand="lg" >
+      
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
+        <Nav className="mr-auto" >
           <Nav.Link>
-            <Link to="/">Home </Link>
+            <Link to="/" style={{textDecoration:"none",fontWeight:"600", color:"#ffffff8c"}}>Home </Link>
           </Nav.Link>
 
           {user?.email ? (
             <>
               <Nav.Link>
-                <Link to="/cart">Cart </Link>
+                <Link to="/cart" style={{textDecoration:"none",fontWeight:"600", color:"#ffffff8c"}}>Cart </Link>
               </Nav.Link>
 
               <Nav.Link>
                 <div>
-                  <Link to="/orders">Orders </Link>
+                  <Link to="/orders" style={{textDecoration:"none",fontWeight:"600", color:"#ffffff8c"}}>Orders </Link>
                 </div>
               </Nav.Link>
               <Nav.Link>
@@ -38,7 +38,7 @@ const MyNavbar = () => {
             </>
           ) : (
             <Nav.Link>
-              <Link to="/login">Login </Link>
+              <Link to="/login" style={{textDecoration:"none",fontWeight:"600", color:"#ffffff8c"}}>Login </Link>
             </Nav.Link>
           )}
         </Nav>

@@ -5,8 +5,8 @@ const cartSchema = new mongoose.Schema(
     user: String,
     cart: [
       {
-        product_id: String,
-        product_name: String,
+        prod_id: String,
+        name: String,
         quantity: Number,
         price: Number,
       },

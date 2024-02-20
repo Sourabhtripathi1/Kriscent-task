@@ -1,31 +1,53 @@
 // Checkout.js
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Table } from "react-bootstrap";
 import MyNavbar from "../components/Navbar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { remove_cart } from "../store/cartSlice";
+import axios from "axios";
+
+import { ToastContainer, toast } from "react-toastify";
 
 export const Checkout = () => {
-  
-  const user = useSelector((state) => state.userAuth.user);
-  
+  const ErrorAlert = (text) =>
+    toast.error(text, {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
 
-  const navigate=useNavigate()
+  const user = useSelector((state) => state.userAuth.user);
+  const dispatch = useDispatch();
+
+  const getTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
+  const cartItems = useSelector((state) => state.userCart.cart);
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: user.name,
+    email: user.email,
+    order: cartItems,
+    total: getTotalPrice(),
     address: "",
-    creditCard: "",
   });
 
-  const cartItems =useSelector((state) => state.userCart.cart);
-
   useEffect(() => {
-
     if (!user.email) {
-      alert("Please Login")
+      ErrorAlert("Please Login");
       navigate("/login");
     }
   }, []);
@@ -38,22 +60,39 @@ export const Checkout = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic (e.g., send data to server, process payment, etc.)
-    console.log("Form submitted:", formData);
-    // You can add further logic for payment processing, order confirmation, etc.
+
+    await axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URI}/api/order/checkout`,
+        formData,
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch(remove_cart());
+        navigate("/orders");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const getTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+  const checkCart = () => {
+    if (cartItems.length <= 0) {
+      ErrorAlert("Your Cart is empty, Can't checkout");
+      navigate("/");
+    }
   };
+
+  useEffect(() => {
+    checkCart();
+  }, []);
 
   return (
     <>
+      <ToastContainer />
       <MyNavbar />
       <div className="container mt-4">
         <h2>Checkout</h2>
@@ -61,7 +100,6 @@ export const Checkout = () => {
         <Table striped bordered responsive>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Quantity</th>
@@ -71,11 +109,10 @@ export const Checkout = () => {
           <tbody>
             {cartItems.map((item) => (
               <tr key={item.id}>
-                <td>{item.id}</td>
                 <td>{item.name}</td>
-                <td>${item.price}</td>
+                <td>₹ {item.price}</td>
                 <td>{item.quantity}</td>
-                <td>${item.price * item.quantity}</td>
+                <td>₹ {item.price * item.quantity}</td>
               </tr>
             ))}
           </tbody>
@@ -119,25 +156,13 @@ export const Checkout = () => {
             />
           </Form.Group>
 
-          <Form.Group controlId="formCreditCard">
-            <Form.Label>Credit Card</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your credit card number"
-              name="creditCard"
-              value={formData.creditCard}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
           <Button variant="primary" type="submit">
             Place Order
           </Button>
         </Form>
 
         <div className="mt-3">
-          <h4>Total Price: ${getTotalPrice()}</h4>
+          <h4>Total Price: ₹ {getTotalPrice()}</h4>
         </div>
       </div>
     </>

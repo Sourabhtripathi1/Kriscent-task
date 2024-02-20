@@ -5,6 +5,10 @@ import MyNavbar from "../components/Navbar";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
+import { auth } from "../firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,6 +27,30 @@ export function Login() {
   const toggleForm = () => {
     setIsLogin((prevIsLogin) => !prevIsLogin);
   };
+
+  const ErrorAlert = (text) =>
+  toast.error(text, {
+    position: "top-center",
+    autoClose: 1500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  });
+
+  const SuccessAlert = (text) =>
+    toast.success(text, {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
 
   const loginUser = async (data) => {
     try {
@@ -48,9 +76,10 @@ export function Login() {
         })
       );
 
+      SuccessAlert("Login Success")
+
       navigate("/");
-    } catch (err) {
-      console.log(err);
+    } catch (err) {  ErrorAlert(err?.response?.data?.message)
     }
   };
 
@@ -75,10 +104,53 @@ export function Login() {
         })
       );
 
+      SuccessAlert("Register Success")
       navigate("/");
     } catch (err) {
       console.log(err);
+       ErrorAlert(err?.response?.data?.message)
     }
+  };
+
+  const provider = new GoogleAuthProvider();
+  const signinwthgoogle = async () => {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const user = result.user.providerData[0];
+
+        await axios
+          .post(
+            `${backend}/api/auth/register/google`,
+            {
+              name: user.displayName,
+              email: user.email,
+              pswd: user.uid,
+            },
+            { withCredentials: true }
+          )
+          .then((res) => {
+            dispatch(
+              signUp({
+                user: {
+                  email: res.data.user.email,
+                  name: res.data.user.name,
+                },
+              })
+            );
+
+            SuccessAlert("Login Success")
+            navigate("/");
+          })
+          .catch((err) => {
+            console.log(err);
+             ErrorAlert(err?.response?.data?.message)
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+      });
   };
 
   const handleSubmit = (e) => {
@@ -101,7 +173,10 @@ export function Login() {
     });
   };
 
+  
+
   const handleInputChange = (e) => {
+
     const { id, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -109,16 +184,17 @@ export function Login() {
     }));
   };
 
+
   return (
     <>
-      {" "}
+      <ToastContainer />
       <MyNavbar />
       <Card style={{ maxWidth: "400px", margin: "auto", marginTop: "50px" }}>
         <Card.Body>
           <h2 className="text-center mb-4">{isLogin ? "Login" : "Sign Up"}</h2>
           <Form onSubmit={handleSubmit}>
             {isLogin ? null : (
-              <Form.Group controlId="name">
+              <Form.Group controlId="name" className="pt-3">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -129,7 +205,7 @@ export function Login() {
                 />
               </Form.Group>
             )}
-            <Form.Group controlId="email">
+            <Form.Group controlId="email"  className="pt-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
@@ -139,7 +215,7 @@ export function Login() {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="password">
+            <Form.Group controlId="password"  className="pt-3">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
@@ -149,9 +225,15 @@ export function Login() {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Button type="submit" className="w-100">
+            <Button type="submit" className="w-100 mt-4">
               {isLogin ? "Login" : "Sign Up"}
             </Button>
+
+<div className="d-flex p-4 justify-content-center">or</div>
+
+<div className="d-flex  justify-content-center ">       <Button className="w-100" style={{backgroundColor:"#f7810d", border:"0"}} onClick={signinwthgoogle}>Continue with Google</Button>
+     </div>
+
           </Form>
           <div className="text-center mt-3">
             {isLogin ? (
@@ -170,8 +252,10 @@ export function Login() {
               </p>
             )}
           </div>
-        </Card.Body>
+        </Card.Body>{" "}
+       
       </Card>
+    
     </>
   );
 }

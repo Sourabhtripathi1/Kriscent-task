@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
     const dat = await userModal.find({ email: email });
 
     if (dat.length > 0) {
-      res.status(500).json("Email Already Exists");
+      res.status(500).json({message:"Email Already Exists"});
     } else {
       let doc = new userModal();
 
@@ -26,16 +26,43 @@ router.post("/register", async (req, res) => {
       doc.password = pswd;
 
       doc = await doc.save();
-
       console.log(doc);
-
       req.session.User = doc;
 
       res.status(200).json({ user: doc });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json("Internal server Error");
+    res.status(500).json({message:"Internal server Error"});
+  }
+});
+
+router.post("/register/google", async (req, res) => {
+  try {
+    //  res.status(200).json("hello");
+
+    const { name, email, pswd } = req.body;
+
+    const dat = await userModal.findOne({ email: email });
+
+    if (dat.length > 0) {
+      res.status(200).json(dat);
+    } else {
+      let doc = new userModal();
+
+      doc.name = name;
+      doc.email = email;
+      doc.password = pswd;
+
+      doc = await doc.save();
+      console.log(doc);
+      req.session.User = doc;
+
+      res.status(200).json({ user: doc });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"Internal server Error"});
   }
 });
 
@@ -52,11 +79,11 @@ router.post("/login", async (req, res) => {
       req.session.User = doc;
       res.status(200).json({ user: doc });
     } else {
-      res.status(500).json("Invalid Credentials");
+      res.status(500).json({message:"Invalid Credentials"});
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json("Internal server Error");
+    res.status(500).json({message:"Internal server Error"});
   }
 });
 
@@ -64,7 +91,7 @@ router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send({message:"Internal Server Error"});
     } else {
       res.status(200).json("logout");
     }

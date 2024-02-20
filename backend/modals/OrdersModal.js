@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema(
   {
     user: String,
+    email: String,
     order: [
       {
         prod_id: String,
@@ -11,7 +12,9 @@ const orderSchema = new mongoose.Schema(
         quantity: Number,
       },
     ],
+    total: Number,
     address: String,
+    status: { type: String, required: true, default: "Placed" },
   },
   { timestamps: true }
 );

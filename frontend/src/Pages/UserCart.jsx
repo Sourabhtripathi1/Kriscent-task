@@ -38,7 +38,6 @@ export const UserCart = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Quantity</th>
@@ -47,13 +46,12 @@ export const UserCart = () => {
             </tr>
           </thead>
           <tbody>
-            {cartItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
+            {cartItems.map((item,index) => (
+              <tr key={index}>
                 <td>{item.name}</td>
-                <td>${item.price}</td>
+                <td>₹ {item.price}</td>
                 <td>{item.quantity}</td>
-                <td>${item.price * item.quantity}</td>
+                <td>₹ {item.price * item.quantity}</td>
                 <td>
                   <Button
                     variant="danger"
@@ -66,7 +64,7 @@ export const UserCart = () => {
           </tbody>
         </Table>
         <div className="text-right">
-          <h4>Total Price: ${getTotalPrice()}</h4>
+          <h4>Total Price: ₹ {getTotalPrice()}</h4>
           <Link to="/checkout">
             <Button variant="primary">Checkout</Button>
           </Link>
