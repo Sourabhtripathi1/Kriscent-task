@@ -1,27 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = { user: {}, authToken: "" };
+const initialState = { user: {} };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    signUp:  (state, action) => {
+    signUp: (state, action) => {
       console.log(action.payload);
-      
+
       state.user = action.payload.user;
-      state.authToken = action.payload.auth;
     },
     login: (state, action) => {
       console.log(action.payload);
 
       state.user = action.payload.user;
-      state.authToken = action.payload.auth;
     },
     logout: (state, action) => {
       state.user = {};
-      state.authToken=""
+
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URI}/api/auth/logout`)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
       window.location.href = "/";
     },

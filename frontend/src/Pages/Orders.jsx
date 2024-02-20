@@ -3,8 +3,11 @@ import { Container, Table } from "react-bootstrap";
 import MyNavbar from "../components/Navbar";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Orders = () => {
+  const backend = process.env.REACT_APP_BACKEND_URI;
+
   const [orders, setOrders] = useState([]);
 
   const user = useSelector((state) => state.userAuth.user);
@@ -27,7 +30,23 @@ export const Orders = () => {
       alert("Please Login");
       navigate("/login");
     }
+  }, []);
 
+  useEffect(() => {
+    const fetch = async () => {
+      await axios
+        .get(`${backend}/api/order/get/${user.email}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    fetch();
   }, []);
 
   return (

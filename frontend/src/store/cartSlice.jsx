@@ -7,10 +7,8 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     setCart: (state, action) => {
-
       state.cart = action.payload.user;
       state.cart = action.payload.cart;
-    
     },
     add_to_cart: (state, action) => {
       state.cart.push({
@@ -21,7 +19,7 @@ export const cartSlice = createSlice({
       });
     },
     remove_from_cart: (state, action) => {
-      state.cart = state.cart.filter((dat) => dat.id != action.payload);
+      state.cart = state.cart.filter((dat) => dat.prod_id != action.payload);
     },
   },
 });

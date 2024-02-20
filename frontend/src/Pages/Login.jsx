@@ -14,6 +14,8 @@ export function Login() {
     password: "",
   });
 
+  const backend = process.env.REACT_APP_BACKEND_URI;
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -24,10 +26,14 @@ export function Login() {
 
   const loginUser = async (data) => {
     try {
-      const res = await axios.post(`http://localhost:5000/api/auth/login`, {
-        email: data.email,
-        pswd: data.pswd,
-      });
+      const res = await axios.post(
+        `${backend}/api/auth/login`,
+        {
+          email: data.email,
+          pswd: data.pswd,
+        },
+        { withCredentials: true }
+      );
       console.log({
         email: res.data.user.email,
         name: res.data.user.name,
@@ -39,7 +45,6 @@ export function Login() {
             email: res.data.user.email,
             name: res.data.user.name,
           },
-          auth: res.data.auth,
         })
       );
 
@@ -51,11 +56,15 @@ export function Login() {
 
   const signUpUser = async (data) => {
     try {
-      const res = await axios.post(`http://localhost:5000/api/auth/register`, {
-        name: data.name,
-        email: data.email,
-        pswd: data.pswd,
-      });
+      const res = await axios.post(
+        `${backend}/api/auth/register`,
+        {
+          name: data.name,
+          email: data.email,
+          pswd: data.pswd,
+        },
+        { withCredentials: true }
+      );
 
       dispatch(
         signUp({
@@ -63,11 +72,10 @@ export function Login() {
             email: res.data.user.email,
             name: res.data.user.name,
           },
-          auth: res.data.auth,
         })
       );
 
-      navigate("/")
+      navigate("/");
     } catch (err) {
       console.log(err);
     }

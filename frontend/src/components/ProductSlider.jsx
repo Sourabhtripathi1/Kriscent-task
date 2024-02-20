@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { add_to_cart } from "../store/cartSlice";
-import { useEffect } from "react";
 
 const ProductSlider = () => {
   const products = useSelector((state) => state.product.products);
@@ -48,7 +47,6 @@ const ProductSlider = () => {
   return (
     <Slider {...settings}>
       {products.map((product) => (
-
         <div key={product._id} className="m-3">
           <div className="card" style={{ margin: "10px" }}>
             <img
@@ -61,15 +59,13 @@ const ProductSlider = () => {
               <p className="card-text">Price: ₹{product.price}</p>
               <button
                 className="btn btn-primary"
-                onClick={() => addToCart(product)}
-              >
+                onClick={() => addToCart(product)}>
                 Add to Cart
               </button>
             </div>
           </div>
         </div>
       ))}
-      
     </Slider>
   );
 };

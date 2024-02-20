@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MyNavbar from "../components/Navbar";
 import { Table, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -10,20 +10,18 @@ import { remove_from_cart } from "../store/cartSlice";
 export const UserCart = () => {
   const cartItems = useSelector((state) => state.userCart.cart);
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.userAuth.user);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     if (!user.email) {
-      alert("Please Login")
+      alert("Please Login");
       navigate("/login");
     }
   }, []);
-
 
   const getTotalPrice = () => {
     let total = 0;
@@ -59,7 +57,7 @@ export const UserCart = () => {
                 <td>
                   <Button
                     variant="danger"
-                    onClick={() => dispatch(remove_from_cart(item.id))}>
+                    onClick={() => dispatch(remove_from_cart(item.prod_id))}>
                     Remove
                   </Button>
                 </td>

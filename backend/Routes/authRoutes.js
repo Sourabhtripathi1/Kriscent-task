@@ -1,10 +1,9 @@
 //authroutes.js
 import express from "express";
 import userModal from "../modals/UserModal.js";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 const router = express.Router();
 
 const secret = process.env.JWT_SECRET;
@@ -30,13 +29,9 @@ router.post("/register", async (req, res) => {
 
       console.log(doc);
 
-      const auth = jwt.sign(
-        { _id: doc._id, name: doc.name, email: doc.email },
-        secret,
-        { expiresIn: "5h" }
-      );
+      req.session.User = doc;
 
-      res.status(200).json({ user: doc, auth: auth });
+      res.status(200).json({ user: doc });
     }
   } catch (error) {
     console.log(error);
@@ -54,14 +49,8 @@ router.post("/login", async (req, res) => {
     let doc = await userModal.findOne({ email: email, password: pswd });
 
     if (doc) {
-
-      const auth = jwt.sign(
-        { _id: doc._id, name: doc.name, email: doc.email },
-        secret,
-        { expiresIn: "5h" }
-      );
-
-      res.status(200).json({ user: doc, auth: auth });
+      req.session.User = doc;
+      res.status(200).json({ user: doc });
     } else {
       res.status(500).json("Invalid Credentials");
     }
@@ -69,6 +58,17 @@ router.post("/login", async (req, res) => {
     console.log(error);
     res.status(500).json("Internal server Error");
   }
+});
+
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.status(200).json("logout");
+    }
+  });
 });
 
 export default router;

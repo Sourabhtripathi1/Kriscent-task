@@ -1,16 +1,20 @@
 import mongoose from "mongoose";
 
+const cartSchema = new mongoose.Schema(
+  {
+    user: String,
+    cart: [
+      {
+        product_id: String,
+        product_name: String,
+        quantity: Number,
+        price: Number,
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-const cartSchema=new mongoose.Schema({
-    user:String,
-    product_id:String,
-    product_name:String,
-    quantity:Number,
-    price:Number
-})
+const cartModal = mongoose.model("cart_table", cartSchema);
 
-
-
-const cartModal=new mongoose.Model("cart_table",cartSchema)
-
-export default cartModal
+export default cartModal;

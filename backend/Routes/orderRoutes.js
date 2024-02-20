@@ -1,14 +1,12 @@
 import express from "express";
-import orderModal from "../modals/OrdersModal";
+import orderModal from "../modals/OrdersModal.js";
 
 const router = express.Router();
 
 router.get("/get/:user", async (req, res) => {
   try {
-
-    const user=req.params.user
-
-    const doc = await orderModal.find({user:user});
+    const user = req.params.user;
+    const doc = await orderModal.find({ user: user });
 
     res.status(200).json(doc);
   } catch (error) {
