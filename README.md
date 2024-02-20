@@ -27,3 +27,6 @@ npm run dev
 
 
 ```
+
+
+The provided code will clone the repo on your system and then install all dependencies to run the application environment
